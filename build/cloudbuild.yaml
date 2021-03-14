@@ -65,7 +65,7 @@ steps:
          --package_path=pipeline.tar.gz
          --version=\"$_TAG\"
          --experiment=\"$_EXPERIMENT_NAME\"
-         --namespace=\"$_KUBEFLOW_NAMESPACE"\
+         --namespace=\"$_KUBEFLOW_NAMESPACE\"
          --run']
   dir: 'kubeflow-examples/pipeline'
   env:

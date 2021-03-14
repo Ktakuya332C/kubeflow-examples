@@ -5,6 +5,11 @@ steps:
   args: ['clone', '${_REPO_URL}']
   id: 'Clone Repo'
 
+# Build kfp-util
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/ml-cicd-template/kfp-util:$_TAG', '.']
+  dir: 'kubeflow-examples/build'
+
 # Run unit tests
 - name: 'python:3.6-slim-jessie'
   entrypoint: 'bash'
@@ -71,3 +76,4 @@ steps:
 images:
 - 'gcr.io/${_PROJECT_ID}/my_add:${_TAG}'
 - 'gcr.io/${_PROJECT_ID}/my_divide:${_TAG}'
+- 'gcr.io/${_PROJECT_ID}/kfp-util:${_TAG}'

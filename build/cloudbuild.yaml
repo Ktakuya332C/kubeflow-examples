@@ -9,14 +9,14 @@ steps:
 - name: 'python:3.6-slim-jessie'
   entrypoint: 'bash'
   args: ['components/tests.sh']
-  dir: 'kfp-cloudbuild'
+  dir: 'kubeflow-examples'
   id: 'Run Unit Tests'
 
 # Create the image for the my_add component
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build',
          '-t', 'gcr.io/$_PROJECT_ID/my_add:$_TAG', '.']
-  dir: 'kfp-cloudbuild/components/my_add'
+  dir: 'kubeflow-examples/components/my_add'
   id: 'Build my_add Image'
   waitFor: ['Run Unit Tests']
 
@@ -24,7 +24,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build',
          '-t', 'gcr.io/$_PROJECT_ID/my_divide:$_TAG', '.']
-  dir: 'kfp-cloudbuild/components/my_divide'
+  dir: 'kubeflow-examples/components/my_divide'
   id: 'Build my_divide Image'
   waitFor: ['Run Unit Tests']
 
@@ -34,7 +34,7 @@ steps:
   args: ['pipeline/helper.py','update-specs',
          '--repo_url', 'gcr.io/${_PROJECT_ID}',
          '--image_tage', '{_TAG}']
-  dir: 'kfp-cloudbuild'
+  dir: 'kubeflow-examples'
   id:  'Update Component Spec Images'
 
 # Compile pipeline
@@ -43,13 +43,13 @@ steps:
   args: ['--py', 'pipeline/workflow.py',
          '--output', 'pipeline/pipeline.tar.gz',
          '--disable-type-check']
-  dir: 'kfp-cloudbuild'
+  dir: 'kubeflow-examples'
   id:  'Compile Pipeline'
 
 # Upload compiled pipeline to GCS
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['cp', 'pipeline.tar.gz', 'settings.yaml', 'gs://${_GCS_LOCATION}/${_TAG}/']
-  dir: 'kfp-cloudbuild/pipeline'
+  dir: 'kubeflow-examples/pipeline'
   id:   'Upload Pipeline to GCS'
 
 # Deploy pipeline in KFP
@@ -61,7 +61,7 @@ steps:
          --version=\"$_TAG\"
          --experiment=\"$_EXPERIMENT_NAME\"
          --run']
-  dir: 'kfp-cloudbuild/pipeline'
+  dir: 'kubeflow-examples/pipeline'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=${_COMPUTE_ZONE}'
   - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'

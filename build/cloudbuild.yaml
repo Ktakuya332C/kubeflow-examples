@@ -2,10 +2,7 @@ steps:
 
 # Clone repo to Cloud Build environment
 - name: 'gcr.io/cloud-builders/git'
-  args: ['clone',
-         '${_REPO_URL}', '.',
-         '--depth', '1',
-         '--verbose']
+  args: ['clone', '${_REPO_URL}']
   id: 'Clone Repo'
 
 # Run unit tests

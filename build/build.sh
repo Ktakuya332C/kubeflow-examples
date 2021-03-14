@@ -25,6 +25,7 @@ _COMPUTE_ZONE='us-central1-a',\
 _CLUSTER_NAME='cluster-1',\
 _GCS_LOCATION='myproject-307507/helloworld/pipelines',\
 _EXPERIMENT_NAME='helloworld-dev',\
+_KUBEFLOW_NAMESPACE='default',\
 _TAG='latest'
 
 # Submit the build job
